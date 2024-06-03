@@ -3,8 +3,9 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView,
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import UserSerializer
 from .models import User
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, ProfileUpdateForm,UserUpdateForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 # Create your views here.
 
@@ -34,7 +35,7 @@ def signin(request):
         user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
+            return redirect('product_list')
         else:
             return redirect('signin')
     return render(request, 'Login.html')
@@ -45,3 +46,7 @@ def signout(request):
 
 def profile(request):
     return render(request, 'profile.html')
+
+def update_profile(request):
+      if request.method == 'POST':
+          

@@ -1,41 +1,31 @@
 from django.contrib import admin
-from .models import Vendor, Product, Review, Category, Coupon, ShippingAddress, Favorites
+from .models import Product,Order,OrderItem,Category
 # Register your models here.
 
-class VendorAdmin(admin.ModelAdmin):
-    list_display = ['shop_name', 'user']
-    search_fields = ['shop_name']
-    list_filter = ['shop_name']
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'vendor', 'price']
-    search_fields = ['name']
-    list_filter = ['vendor']
-class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['product', 'user', 'rating']
-    search_fields = ['product']
+    list_display = ['name', 'price', 'stock', 'active']
+    list_filter = ['active', 'stock']
+    search_fields = ['name', 'description']
+    list_editable = ['price', 'stock', 'active']
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['user', 'placed_at', 'status', 'total_price']
+    list_filter = ['status']
+    search_fields = ['items']
+    list_editable = ['status', 'total_price']
+
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ['ordered_by', 'order', 'product', 'quantity', 'price']
     list_filter = ['product']
+    search_fields = ['ordered_by', 'quantity']
+    list_editable = ['quantity', 'price']
+
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name']
-    search_fields = ['name']
-    list_filter = ['name']
-class CouponAdmin(admin.ModelAdmin):
-    list_display = ['code', 'discount_percentage', 'expiration_date']
-    search_fields = ['code']
-    list_filter = ['code']
-class ShippingAddressAdmin(admin.ModelAdmin):
-    list_display = ['user', 'address_line1', 'city', 'state', 'postal_code']
-    search_fields = ['user']
-    list_filter = ['user']
-class FavoritesAdmin(admin.ModelAdmin):
-    list_display = ['user', 'product']
-    search_fields = ['user']
-    list_filter = ['user']
+    list_display = ['name', 'description']
+    search_fields = ['name', 'description']
 
-admin.site.register(Vendor, VendorAdmin)
+
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Review, ReviewAdmin)
+admin.site.register(Order, OrderAdmin)
+admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(Coupon, CouponAdmin)
-admin.site.register(ShippingAddress, ShippingAddressAdmin)
-admin.site.register(Favorites, FavoritesAdmin)
-

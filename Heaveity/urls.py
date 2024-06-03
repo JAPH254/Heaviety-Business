@@ -20,9 +20,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from server import views
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.product_list, name='product_list'),
+    path('add/', views.add_product, name='add_product'),
     path('admin/', admin.site.urls),
-    path('server/', include('server.urls')),
+    # path('server/', include('server.urls')),
     path('auth/', include('users.urls')),
     # path('auth/', include('djoser.urls')),
     # path('auth/', include('djoser.urls.authtoken')),

@@ -1,60 +1,50 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-User = get_user_model()
-# Create your models here.
-class Vendor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    shop_name = models.CharField(max_length=100)
-    description = models.TextField()
-    logo = models.ImageField(upload_to='vendor_logos/')
+from users.models import User
 
-    def __str__(self):
-        return self.shop_name
 class Category(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    # parent_category = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)  # Optional for subcategories
 
     def __str__(self):
         return self.name
+
 class Product(models.Model):
-    productCategory = models.ForeignKey(Category, on_delete=models.CASCADE)
-    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='product_images/')
+    image = models.ImageField(upload_to='products/', blank=True)  # Adjust upload path as needed
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    stock = models.PositiveIntegerField()
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
-class Review(models.Model):
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    placed_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, choices=(
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('shipped', 'Shipped'),
+        ('delivered', 'Delivered'),
+        ('canceled', 'Canceled'),
+    ))
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    items = models.ManyToManyField(Product, through='OrderItem')  # Using a separate OrderItem model (optional)
+
+    def __str__(self):
+        return f"Order {self.pk} - {self.user.first_name}"
+
+class OrderItem(models.Model):
+    ordered_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.PositiveIntegerField()
-    comment = models.TextField()
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"Review for {self.product}"
-
-class Coupon(models.Model):
-    code = models.CharField(max_length=20, unique=True)
-    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
-    expiration_date = models.DateField()
-
-    def __str__(self):
-        return self.code
-class ShippingAddress(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    address_line1 = models.CharField(max_length=100)
-    address_line2 = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=50)
-    state = models.CharField(max_length=50)
-    postal_code = models.CharField(max_length=10)
-
-    def __str__(self):
-        return f"{self.user.username}'s Shipping Address"
-class Favorites(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.user.username}'s Favorite: {self.product.name}"
+        return f"{self.quantity}x {self.product.name} (Order {self.order.pk})"

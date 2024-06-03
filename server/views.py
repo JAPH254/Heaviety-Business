@@ -1,78 +1,103 @@
-from django.shortcuts import render
-from .serializers import VendorSerializer, ProductSerializer, ReviewSerializer, CategorySerializer, CouponSerializer, ShippingAddressSerializer, FavoritesSerializer
-from .models import Vendor, Product, Review, Category, Coupon, ShippingAddress, Favorites
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
-import requests
+# views.py
+from django.shortcuts import render, redirect
+from .models import Product
+from .forms import ProductForm
+from django.http import JsonResponse
 
-Domain = 'http://127.0.0.1:8000/'
-# Create your views here.
-def home(request):
+
+def product_list(request):
+    products = Product.objects.all().select_related('owner')
+    form = ProductForm()
+    return render(request, 'product_list.html', {'products': products, 'form': form})
+
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.owner = request.user
+            product.save()
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': True})
+        else:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'errors': form.errors})
+            return redirect('home')
+    else:
+        form = ProductForm()
+    return redirect('product_list')
+
+# from django.shortcuts import render,redirect
+# from .serializers import ProductSerializer,CategorySerializer,OrderSerializer,OrderItemSerializer
+# from .models import Product,Category,Order,OrderItem
+# from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView 
+# from rest_framework.permissions import IsAuthenticated, AllowAny
+# import requests
+# from django.shortcuts import  get_object_or_404
+# from .forms import ProductForm
+# from django.http import JsonResponse
+# from django.contrib.auth.decorators import login_required
+
+
+# Domain = 'http://127.0.0.1:8000/'
+# # Create your views here.
+# def home(request):
     
-    return render(request, 'base.html')
+#     return render(request, 'base.html')
 
 
-class VendorView(ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView):
-    """
-    View for Vendor model.
-    """
-    queryset = Vendor.objects.all()
-    serializer_class = VendorSerializer
-    permission_classes = [AllowAny]
+# class ProductView(ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView):
+#     """
+#     View for Product model.
+#     """
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
+#     permission_classes = [AllowAny]
 
-class ProductView(ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView):
-    """
-    View for Product model.
-    """
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [AllowAny]
 
-class ReviewView(ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView):
-    """
-    View for Review model.
-    """
-    queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
-    permission_classes = [AllowAny]
 
-class CategoryView(ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView):
-    """
-    View for Category model.
-    """
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    permission_classes = [AllowAny]
+# class CategoryView(ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView):
+#     """
+#     View for Category model.
+#     """
+#     queryset = Category.objects.all()
+#     serializer_class = CategorySerializer
+#     permission_classes = [AllowAny]
 
-class CouponView(ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView):
-    """
-    View for Coupon model.
-    """
-    queryset = Coupon.objects.all()
-    serializer_class = CouponSerializer
-    permission_classes = [AllowAny]
+# class OrderView(ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView):
+#     """
+#     View for Order model.
+#     """
+#     queryset = Order.objects.all()
+#     serializer_class = OrderSerializer
+#     permission_classes = [AllowAny]
 
-class ShippingAddressView(ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView):
-    """
-    View for ShippingAddress model.
-    """
-    queryset = ShippingAddress.objects.all()
-    serializer_class = ShippingAddressSerializer
-    permission_classes = [AllowAny]
+# class OrderItemView(ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView):
+#     """
+#     View for OrderItem model.
+#     """
+#     queryset = OrderItem.objects.all()
+#     serializer_class = OrderItemSerializer
+#     permission_classes = [AllowAny]
+# def home(request):
+#     products = Product.objects.all().select_related('owner')
+#     context = {'products': products}
+#     return render(request, 'index.html', context)
 
-class FavoritesView(ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView):
-    """
-    View for Favorites model.
-    """
-    queryset = Favorites.objects.all()
-    serializer_class = FavoritesSerializer
-    permission_classes = [AllowAny]
-def getVendors(request):
-    vendors = requests.get(Domain + 'server/vendors/')
-    data = vendors.json()
-    return render(request, 'vendors.html', {'data': data})
-def home(request):
-    productInfo = requests.get(Domain + 'server/products/')
-    data = productInfo.json()
-    return render(request, 'index.html', {'data': data})
-
+# @login_required
+# def addProduct(request):
+#     if request.method == 'POST':
+#         form = ProductForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             product = form.save(commit=False)
+#             product.owner = request.user
+#             product.save()
+#             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+#                 return JsonResponse({'success': True})
+#         else:
+#             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+#                 return JsonResponse({'success': False, 'errors': form.errors})
+#             return redirect('home')
+#     else:
+#         form = ProductForm()
+#     return render(request, 'index.html', {'form': form})
