@@ -3,6 +3,10 @@ from django.shortcuts import render, redirect
 from .models import Product
 from .forms import ProductForm
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseNotFound
 
 
 def product_list(request):
@@ -26,6 +30,102 @@ def add_product(request):
     else:
         form = ProductForm()
     return redirect('product_list')
+
+# the user can only be able to delete or update the product if the user is the owner of the product.
+
+# from django.shortcuts import get_object_or_404, redirect
+# from django.contrib import messages
+
+# def delete_product(request, product_id):
+#     product = get_object_or_404(Product, id=product_id, owner=request.user)
+#     if request.method == "POST":
+#         product.delete()
+#         messages.success(request, 'Product deleted successfully.')
+#         return redirect('profile') 
+#     else:
+#         return render(request, 'product_list.html', {'product': product})
+    
+# from django.shortcuts import redirect
+# from django.http import HttpResponseNotFound
+
+def delete_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    if request.user != product.owner:
+        return HttpResponseNotFound()
+    product.delete()
+    return redirect('product_list')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # from django.shortcuts import render,redirect
 # from .serializers import ProductSerializer,CategorySerializer,OrderSerializer,OrderItemSerializer

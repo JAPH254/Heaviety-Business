@@ -2,7 +2,6 @@ from django.db import models
 from users.models import User
 
 class Category(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     # parent_category = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)  # Optional for subcategories

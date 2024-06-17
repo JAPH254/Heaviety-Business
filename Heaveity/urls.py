@@ -22,6 +22,7 @@ from server import views
 urlpatterns = [
     path('', views.product_list, name='product_list'),
     path('add/', views.add_product, name='add_product'),
+    path('delete/<int:id>/', views.delete_product, name='delete_product'),
     path('admin/', admin.site.urls),
     # path('server/', include('server.urls')),
     path('auth/', include('users.urls')),
@@ -30,6 +31,6 @@ urlpatterns = [
     # path('auth/', include('djoser.urls.jwt')),
 
 ]
-# handle static file
+
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
