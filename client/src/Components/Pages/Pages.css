@@ -1,0 +1,38 @@
+/* HomePage.css */
+.home-page {
+    background: linear-gradient(to right, #4f46e5, #7c3aed);
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .sidebar {
+    background-color: #f8f9fa;
+  }
+  
+  .sidebar .profile-summary img {
+    border-radius: 50%;
+    border: 4px solid #3b82f6;
+  }
+  
+  .main-content {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .home-page {
+      flex-direction: column;
+    }
+  
+    .sidebar {
+      width: 100%;
+      position: static;
+    }
+  
+    .main-content {
+      width: 100%;
+    }
+  }
+  

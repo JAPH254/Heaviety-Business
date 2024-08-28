@@ -1,0 +1,25 @@
+/* modal.css */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Optional: Adjust overlay color */
+    display: flex;
+    align-items: flex-start; /* Align content to the top */
+    justify-content: flex-end; /* Align content to the right */
+  }
+  
+  .modal-content {
+    position: relative;
+    top: 1rem; /* Adjust distance from the top */
+    right: 1rem; /* Adjust distance from the right */
+    max-width: 90%;
+    background: white; /* Ensure the background is white for readability */
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  

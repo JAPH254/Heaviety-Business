@@ -1,6 +1,11 @@
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import ProductViewSet, ProductCategoryViewSet
+
+router = DefaultRouter()
+router.register(r'products', ProductViewSet)
+router.register(r'categories', ProductCategoryViewSet)
 
 urlpatterns = [
-    path('delete_product/<int:product_id>/', views.delete_product, name='delete_product'),
+    path('', include(router.urls)),
 ]
