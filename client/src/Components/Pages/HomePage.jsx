@@ -6,12 +6,13 @@ import { fetchProfile } from "../../features/auth/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
 import AddProducts from "../products/AddProduct";
 import AddCategory from "../products/AddCategory";
+import { fetchProductsCategory } from "../../features/products/productActions";
+import ManageCategories from "../products/ManageCategories";
 const HomePage = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
   const status = useSelector((state) => state.products.status);
-  const { user, isLoading, error } = useSelector(state => state.profile);
-  console.log(user);
+  const { user, isLoading, error } = useSelector((state) => state.profile);
 
   useEffect(() => {
     if (status === "idle") {
@@ -76,7 +77,7 @@ const HomePage = () => {
               placeholder="Search..."
               className="p-2 border border-gray-300 rounded"
             />
-            <AddProducts  />
+            <AddProducts />
             <div className="user-menu relative">
               <button className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
                 {user?.first_name}
@@ -163,13 +164,9 @@ const HomePage = () => {
       <aside className="right-sidebar bg-gray-200 p-4 w-1/5 min-h-screen sticky top-0">
         <div className="quick-actions mb-6">
           <h3 className="text-xl font-bold mb-4">Quick Actions</h3>
-          <Link
-            to="/add-product"
-            className="bg-blue-500 text-white p-3 rounded hover:bg-blue-600 block mb-4"
-          >
-            New Category
-          </Link>
+      
           <AddCategory />
+          <ManageCategories/>
           <Link
             to="/notifications"
             className="bg-blue-500 text-white p-3 rounded hover:bg-blue-600 block mb-4"
