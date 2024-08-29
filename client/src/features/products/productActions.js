@@ -97,3 +97,35 @@ export const createCategory = createAsyncThunk(
     }
   }
 );
+
+export const updateCategory = createAsyncThunk(
+  "products/updateCategory",
+  async ({ id, formValues }, thunkAPI) => {
+    try {
+      const response = await axios.put(`http://127.0.0.1:8000/api/categories/${id}/`, formValues, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      return response.data; // Ensure that the updated category data is returned
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteCategory = createAsyncThunk(
+  "products/deleteCategory",
+  async (id, thunkAPI) => {
+    try {
+      await axios.delete(`/api/categories/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      return id;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
