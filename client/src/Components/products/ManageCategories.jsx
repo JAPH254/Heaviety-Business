@@ -7,6 +7,7 @@ import {
   updateCategory,
   deleteCategory,
 } from "../../features/products/productActions";
+import { Link } from "react-router-dom";
 
 const ManageCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -88,10 +89,10 @@ const ManageCategories = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-1">
       <button
         onClick={() => setIsModalOpen(true)}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        className="text-success"
       >
         Manage Categories
       </button>
