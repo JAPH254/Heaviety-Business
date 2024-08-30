@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { createCategory } from "../../features/products/productActions";
+import { Link } from "react-router-dom";
 
 const AddCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -48,13 +49,14 @@ const AddCategory = () => {
   };
 
   return (
-    <div className="p-4">
-      <button
+    <div className="p-1">
+      <Link
+        to="/add-category"
         onClick={handleAddCategory}
-        className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+        className="text-success"
       >
-        + Add Category
-      </button>
+        Add Category
+      </Link>
     </div>
   );
 };
