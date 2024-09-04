@@ -14,7 +14,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
-    profile_picture = models.ImageField(upload_to="profile_pictures/", null=True, blank=True, default="profile_pictures/default.jpg")
+    profile_picture = models.ImageField(upload_to="profile_pictures/", null=True, blank=True, default="default.jpg")
     location = models.CharField(max_length=50, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
     speciality = models.CharField(max_length=50, null=True, blank=True)
