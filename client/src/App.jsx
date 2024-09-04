@@ -9,6 +9,7 @@ import LandingPage from './Components/Pages/LandingPage';
 import HomePage from './Components/Pages/HomePage';
 import ProductsList from './Components/products/ProductList';
 import Profile from './Components/Profile';
+import Chat from './Components/Pages/Chat';
 
 const App = () => {
   const toastContainerStyle = {
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/products" element={<ProductsList />} />
         <Route path="/register" element={<RegisterModal />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/chat" element={<Chat />} />
         <Route path="/login" element={<LoginModal />} />
         <Route path="/activate/:uid/:token" element={<UserActivation />} />
       </Routes>
