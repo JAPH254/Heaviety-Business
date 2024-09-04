@@ -1,11 +1,12 @@
-import React from 'react';
-import Modal from 'react-modal';
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../features/auth/authSlice';
-import './auth.css'; // Import the CSS file with modal styles
+import React, { useEffect } from "react";
+import Modal from "react-modal";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../features/auth/authSlice";
+import "./auth.css"; // Import the CSS file with modal styles
+import { useNavigate } from "react-router-dom";
 
-Modal.setAppElement('#root'); // Important for accessibility
+Modal.setAppElement("#root"); 
 
 const LoginModal = ({ isOpen, onRequestClose }) => {
   const {
@@ -14,11 +15,19 @@ const LoginModal = ({ isOpen, onRequestClose }) => {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const { token, isLoading, error } = useSelector((state) => state.auth);
 
   const onSubmit = (data) => {
     dispatch(loginUser(data));
   };
+
+  useEffect(() => {
+    if (token) {
+      onRequestClose();
+      navigate("/home");
+    }
+  }, [token, navigate, onRequestClose]);
 
   return (
     <Modal
