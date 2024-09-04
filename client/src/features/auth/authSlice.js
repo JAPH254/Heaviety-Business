@@ -32,6 +32,7 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -68,6 +69,7 @@ export const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.token = action.payload.access;
+        state.user = action.payload.user;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;

@@ -17,7 +17,7 @@ export const fetchProfile = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-
+      
       return response.data;
     } catch (error) {
       return rejectWithValue(

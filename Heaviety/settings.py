@@ -52,8 +52,9 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     "server",
-
+    "channels",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -91,6 +92,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "Heaviety.wsgi.application"
+ASGI_APPLICATION = 'Heaviety.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 
 # Database
